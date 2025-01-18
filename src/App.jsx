@@ -76,7 +76,7 @@ function App() {
     const connectToChat = async () => {
         try {
             setLoading(true);
-            const socketIo = io("https://chat-app-backend-assignment.el.r.appspot.com", {
+            const socketIo = io("http://localhost:8080", {
                 transports: ['websocket'],
             });
             setSocket(socketIo);
@@ -90,7 +90,7 @@ function App() {
 
     const getTicketList = async () => {
         try {
-            const response = await axios.post("https://chat-app-backend-assignment.el.r.appspot.com/api/v1/ticket/list", { orgId: "org1" });
+            const response = await axios.post("http://localhost:8080/api/v1/ticket/list", { orgId: "org1" });
             if (!response) return console.log("Something went wrong");
             setTicketList(response.data);
         } catch(e) {
@@ -100,7 +100,7 @@ function App() {
 
     const getOlderMessages = async () => {
         try {
-            const response = await axios.post("https://chat-app-backend-assignment.el.r.appspot.com/api/v1/chat/list", { ticketId: currentTicketInfo?.ticket?.id });
+            const response = await axios.post("http://localhost:8080/api/v1/chat/list", { ticketId: currentTicketInfo?.ticket?.id });
             if (!response) return console.log("Something went wrong");
             setMessages(prev => [...response.data, ...prev]);
         } catch(e) {
