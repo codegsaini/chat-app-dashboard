@@ -4,6 +4,8 @@ import { Sidebar } from './Sidebar';
 import axios from 'axios';
 import io from 'socket.io-client';
 
+const BASE_URL = 'https://chat-app-backend-9i97.onrender.com';
+
 function App() {
 	const endMessageRef = useRef(null);
 	const [socket, setSocket] = useState(null);
@@ -103,7 +105,7 @@ function App() {
 	const connectToSocket = async () => {
 		try {
 			setLoading(true);
-			const socketIo = io('http://localhost:8080', {
+			const socketIo = io(BASE_URL, {
 				transports: ['websocket'],
 			});
 			setSocket(socketIo);
@@ -117,10 +119,9 @@ function App() {
 
 	const getTicketList = async () => {
 		try {
-			const response = await axios.post(
-				'http://localhost:8080/api/v1/ticket/list',
-				{ orgId: 'org1' }
-			);
+			const response = await axios.post(`${BASE_URL}/api/v1/ticket/list`, {
+				orgId: 'org1',
+			});
 			if (!response) return console.log('Something went wrong');
 			setTicketList(response.data);
 			response.data?.forEach((ticketInfo) => {
@@ -136,10 +137,9 @@ function App() {
 
 	const getOlderMessages = async () => {
 		try {
-			const response = await axios.post(
-				'http://localhost:8080/api/v1/chat/list',
-				{ ticketId: currentTicketInfo?.ticket?.id }
-			);
+			const response = await axios.post(`${BASE_URL}/api/v1/chat/list`, {
+				ticketId: currentTicketInfo?.ticket?.id,
+			});
 			if (!response) return console.log('Something went wrong');
 			setLatestMessageBuffer((prev) => ({
 				...prev,
